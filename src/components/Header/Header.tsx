@@ -17,6 +17,9 @@ const Header = () => {
                             <Link to={"/entries"}>Заявки</Link>
                         </div>
                         <div className={cls.menu__item}>
+                            <Link to={"/login"}>Авторизация</Link>
+                        </div>
+                        <div className={cls.menu__item}>
                             <Link to={"/register"}>Регистрация</Link>
                         </div>
                     </div>
