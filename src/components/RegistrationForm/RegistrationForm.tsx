@@ -14,14 +14,11 @@ const RegistrationForm = () => {
     } = useForm<UserRegisterPayload>();
     const navigate = useNavigate()
 
-
     const onSubmit: SubmitHandler<UserRegisterPayload> = (data) => {
         console.log("Form data:", data);
 
-
         registerUser(data).then((user) => {
             console.log("User:", user);
-            localStorage.setItem("registered_user_id", user.id.toString());
             navigate(RoutePath.login)
         }).catch((err) => {
             if (err instanceof APIException) {

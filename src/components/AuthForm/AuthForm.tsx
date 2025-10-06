@@ -1,7 +1,10 @@
 import { APIException } from "@/api/error";
 import { loginUser } from "@/api/user";
+import type { User } from "@/api/user/types";
 import { RoutePath } from "@/config/routeConfig/routeConfig";
+import { setCurrentUser } from "@/utils/auth";
 import { Box, Button, TextField } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 
@@ -23,11 +26,13 @@ const AuthForm = () => {
 
         loginUser(data).then((data) => {
             console.log("Token:", data.token);
-            // console.log("Decoded Token", jwtDecode(data.token))
 
-            localStorage.setItem("token", data.token);
+            const decodedToken = jwtDecode<User>(data.token);
+            console.log("Decoded Token", decodedToken);
+
+            setCurrentUser(decodedToken)
+
             navigate(RoutePath.main)
-
         }).catch((err) => {
             if (err instanceof APIException) {
                 console.log(err.messageFromServer); // "invalid phone number"
