@@ -18,7 +18,6 @@ export interface UserRegisterPayload {
     patronymic: string,
     phone: string,
     email: string,
-    isAdmin: boolean,
 }
 
 export interface UserRegisterResponse {

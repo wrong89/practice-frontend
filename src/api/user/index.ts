@@ -1,10 +1,10 @@
 import handleAPIError from '../error';
 import { api } from '../index';
-import type { LoginResponse, User, UserLoginPayload, UserRegisterPayload } from './types';
+import type { LoginResponse, UserLoginPayload, UserRegisterPayload, UserRegisterResponse } from './types';
 
-export async function registerUser(payload: UserRegisterPayload): Promise<User> {
+export async function registerUser(payload: UserRegisterPayload): Promise<UserRegisterResponse> {
     try {
-        const res = await api.post<User>('/user/register', payload);
+        const res = await api.post<UserRegisterResponse>('/user/register', payload);
         return res.data;
     } catch (err) {
         handleAPIError(err);

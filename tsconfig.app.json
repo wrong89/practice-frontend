@@ -59,6 +59,7 @@
         "noUncheckedSideEffectImports": true
     },
     "include": [
-        "src"
+        "src",
+        "src/globals.d.ts"
     ]
 }
