@@ -1,0 +1,16 @@
+
+
+.notfound {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &__text {
+        color: var(--error-color);   
+    }
+
+    &__back {
+        margin-top: 20px;
+    }
+}
