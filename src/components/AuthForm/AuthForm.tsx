@@ -1,10 +1,12 @@
 import { APIException } from "@/api/error";
+import { ErrorMessages } from "@/api/error/errors";
 import { loginUser } from "@/api/user";
 import type { User } from "@/api/user/types";
 import { RoutePath } from "@/config/routeConfig/routeConfig";
 import { setCurrentUser } from "@/utils/auth";
 import { Box, Button, TextField } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 
@@ -21,6 +23,8 @@ const AuthForm = () => {
     } = useForm<AuthInputs>();
     const navigate = useNavigate()
 
+    const [msg, setMsg] = useState("")
+
     const handleFormSubmit: SubmitHandler<AuthInputs> = (data) => {
         console.log("form data", data)
 
@@ -35,6 +39,11 @@ const AuthForm = () => {
             navigate(RoutePath.main)
         }).catch((err) => {
             if (err instanceof APIException) {
+                const msg = ErrorMessages[err.messageFromServer]
+                if (msg) {
+                    setMsg(msg)
+                }
+
                 console.log(err.messageFromServer); // "invalid phone number"
                 console.log(err.time);              // "2025-10-06T21:38:45.1919612+03:00"
                 console.log(err.status);            // HTTP статус от сервера
@@ -83,6 +92,8 @@ const AuthForm = () => {
                 type="password"
                 variant="outlined"
             />
+
+            {msg && <p style={{ color: "red", textAlign: "center" }}>{msg}</p>}
 
             <Button type="submit" variant="contained">
                 Войти

@@ -1,8 +1,10 @@
 import { APIException } from "@/api/error";
+import { ErrorMessages } from "@/api/error/errors";
 import { registerUser } from "@/api/user";
 import type { UserRegisterPayload } from "@/api/user/types";
 import { RoutePath } from "@/config/routeConfig/routeConfig";
 import { Box, Button, TextField } from "@mui/material";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 
@@ -14,6 +16,8 @@ const RegistrationForm = () => {
     } = useForm<UserRegisterPayload>();
     const navigate = useNavigate()
 
+    const [errMsg, setErrMsg] = useState("")
+
     const onSubmit: SubmitHandler<UserRegisterPayload> = (data) => {
         console.log("Form data:", data);
 
@@ -22,6 +26,10 @@ const RegistrationForm = () => {
             navigate(RoutePath.login)
         }).catch((err) => {
             if (err instanceof APIException) {
+                const msg = ErrorMessages[err.messageFromServer]
+                if (msg) {
+                    setErrMsg(msg)
+                }
                 console.log(err.messageFromServer); // "invalid phone number"
                 console.log(err.time);              // "2025-10-06T21:38:45.1919612+03:00"
                 console.log(err.status);            // HTTP статус от сервера
@@ -55,16 +63,6 @@ const RegistrationForm = () => {
                         value: /^[A-Za-z0-9]+$/,
                         message: "Только латинские буквы и цифры",
                     },
-                    validate: async (value) => {
-                        // имитация запроса на сервер
-                        const existing = ["admin", "test123", "user1"];
-
-                        await new Promise((r) => setTimeout(r, 300)); // задержка
-
-                        return existing.includes(value.toLowerCase())
-                            ? "Такой логин уже занят"
-                            : true;
-                    },
                 })}
                 label="Логин"
                 variant="outlined"
@@ -74,7 +72,6 @@ const RegistrationForm = () => {
                 required
                 error={!!errors.password}
                 helperText={errors.password && "Пароль должен быть длиннее 8 символов"}
-                // {...register("password", { required: true, minLength: 8 })}
                 {...register("password", { required: true, minLength: 3 })}
                 label="Пароль"
                 type="password"
@@ -131,6 +128,8 @@ const RegistrationForm = () => {
                 label="Email"
                 variant="outlined"
             />
+
+            {errMsg && <p style={{ color: "red", textAlign: "center" }}>{errMsg}</p>}
 
             <Button type="submit" variant="contained">
                 Зарегистрироваться

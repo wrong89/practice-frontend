@@ -1,5 +1,5 @@
 export interface User {
-    id: string;
+    uid: string;
     login: string,
     password: string,
     name: string,
@@ -7,7 +7,6 @@ export interface User {
     patronymic: string,
     phone: string,
     email: string,
-    isAdmin: boolean,
 }
 
 export interface UserRegisterPayload {
@@ -31,4 +30,8 @@ export interface UserLoginPayload {
 
 export interface LoginResponse {
     token: string;
+}
+
+export interface UserIsAdminResponse {
+    is_admin: boolean
 }
