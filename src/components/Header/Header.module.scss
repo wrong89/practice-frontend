@@ -1,0 +1,11 @@
+.header {
+    background-color: var(--secondary-background);
+
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // padding: 20px 0;
+        padding: calc(var(--header-height) / 2) 0;
+    }
+}

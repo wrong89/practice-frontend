@@ -15,18 +15,20 @@ const MainPage = () => {
     const [data, setData] = useState("")
 
     return (
-        <>
-            <h1>MainPage</h1>
-            <div className="card">
-                <button onClick={async () => {
-                    const d = await getTestData()
-                    setData(d)
-                }}>
-                    Отправить запрос
-                </button>
+        <div className="app">
+            <div className="container">
+                <h1>MainPage</h1>
+                <div className="card">
+                    <button onClick={async () => {
+                        const d = await getTestData()
+                        setData(d)
+                    }}>
+                        Отправить запрос
+                    </button>
+                </div>
+                {data.length > 0 && <h1>ResultData: <span style={{ color: "lightgreen" }}>{data}</span></h1>}
             </div>
-            {data.length > 0 && <h1>ResultData: <span style={{ color: "lightgreen" }}>{data}</span></h1>}
-        </>
+        </div>
     )
 }
 

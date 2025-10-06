@@ -1,14 +1,10 @@
-import { Route, Routes } from 'react-router'
-import './App.css'
-import MainPage from './pages/MainPage'
+import AppRouter from "./provider/router/ui/AppRouter"
 
 function App() {
     return (
-        <>
-            <Routes>
-                <Route path="/" element={<MainPage />} />
-            </Routes>
-        </>
+        <div className="app">
+            <AppRouter />
+        </div>
     )
 }
 

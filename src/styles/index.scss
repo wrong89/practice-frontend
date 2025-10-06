@@ -1,0 +1,20 @@
+@use "reset";
+@use "variables/global.scss";
+@use "fonts/index.scss";
+
+body {
+    font: var(--font-m);
+    color: #f2f2f2;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.app {
+    background: #0f0f0f;
+    min-height: 100vh;
+}
