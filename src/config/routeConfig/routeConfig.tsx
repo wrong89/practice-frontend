@@ -1,26 +1,47 @@
 
+import { CreateEntryPage } from "@/pages/CreateEntryPage"
+import { EntriesPage } from "@/pages/EntriesPage"
 import { LoginPage } from "@/pages/LoginPage"
-import RegisterPage from "@/pages/RegisterPage"
+import { MainPage } from "@/pages/MainPage"
+import { RegisterPage } from "@/pages/RegisterPage"
 import type { RouteProps } from "react-router"
 
 
 export enum AppRoutes {
+    MAIN = "main",
     REGISTER = "register",
-    LOGIN = "login"
+    LOGIN = "login",
+    ENTRIES = "entries",
+    CREATE_ENTRY = "create_entry"
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
+    [AppRoutes.MAIN]: "/",
     [AppRoutes.REGISTER]: "/register",
-    [AppRoutes.LOGIN]: "/"
+    [AppRoutes.LOGIN]: "/login",
+    [AppRoutes.CREATE_ENTRY]: "/entry/create",
+    [AppRoutes.ENTRIES]: "/entries"
 }
 
 export const routeConfig: Record<AppRoutes, RouteProps> = {
+    [AppRoutes.MAIN]: {
+        path: RoutePath.main,
+        element: <MainPage />
+    },
     [AppRoutes.REGISTER]: {
         path: RoutePath.register,
-        element: <RegisterPage />
+        element: <RegisterPage />,
     },
     [AppRoutes.LOGIN]: {
         path: RoutePath.login,
         element: <LoginPage />
+    },
+    [AppRoutes.ENTRIES]: {
+        path: RoutePath.entries,
+        element: <EntriesPage />
+    },
+    [AppRoutes.CREATE_ENTRY]: {
+        path: RoutePath.create_entry,
+        element: <CreateEntryPage />
     }
 }

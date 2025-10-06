@@ -1,6 +1,8 @@
 .header {
     background-color: var(--secondary-background);
-
+    border-bottom: 1px solid #f2f2f2;
+    margin-bottom: 100px;
+    
     &__inner {
         display: flex;
         justify-content: space-between;
@@ -8,4 +10,16 @@
         // padding: 20px 0;
         padding: calc(var(--header-height) / 2) 0;
     }
+
+    &__menu {
+        display: flex;
+        align-items: center;
+    }
+
+}
+.menu__item {
+    &:last-child {
+        margin-right: 0;
+    }
+    margin-right: 30px;
 }
