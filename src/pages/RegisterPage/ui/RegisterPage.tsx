@@ -1,11 +1,12 @@
 import RegistrationForm from "@/components/RegistrationForm/RegistrationForm"
+import cls from "./RegisterPage.module.scss"
 
 const RegisterPage = () => {
     return (
-        <>
-            <h1>Страница регистрации</h1>
+        <div className={cls.register}>
+            <h1 className={cls.register__title}>Регистрация</h1>
             <RegistrationForm />
-        </>
+        </div>
     )
 }
 

@@ -1,0 +1,19 @@
+
+
+.login {
+    &__title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    &__hint {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    &__link {
+        text-decoration: none;
+        margin-left: 10px;
+        color: inherit;
+    }
+}
