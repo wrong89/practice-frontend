@@ -7,10 +7,11 @@ import { Route, Routes } from 'react-router';
 const AppRouter = () => {
     return (
         <Routes>
-            {Object.values(routeConfig).map(({ path, element }) => (
+            {Object.values(routeConfig).map(({ path, element, middleware }) => (
                 <Route
                     key={path}
                     path={path}
+                    middleware={middleware}
                     element={
                         <Layout>
                             <Suspense fallback={<Loader />}>{element}</Suspense>

@@ -34,6 +34,8 @@ const AuthForm = () => {
             const decodedToken = jwtDecode<User>(data.token);
             console.log("Decoded Token", decodedToken);
 
+            decodedToken.token = data.token
+
             setCurrentUser(decodedToken)
 
             navigate(RoutePath.main)

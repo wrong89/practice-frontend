@@ -41,11 +41,11 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     },
     [AppRoutes.ENTRIES]: {
         path: RoutePath.entries,
-        element: <EntriesPage />
+        element: <EntriesPage />,
     },
     [AppRoutes.CREATE_ENTRY]: {
         path: RoutePath.create_entry,
-        element: <CreateEntryPage />
+        element: <CreateEntryPage />,
     },
     [AppRoutes.NOT_FOUND]: {
         path: RoutePath.not_found,

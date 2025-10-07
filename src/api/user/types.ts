@@ -7,6 +7,7 @@ export interface User {
     patronymic: string,
     phone: string,
     email: string,
+    token: string,
 }
 
 export interface UserRegisterPayload {
