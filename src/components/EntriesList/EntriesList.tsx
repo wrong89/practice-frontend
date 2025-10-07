@@ -24,6 +24,13 @@ const texts: Record<string, string> = {
     "rejected": "Отклонена",
 }
 
+const courseTexts: Record<string, string> = {
+    "frontend": "Frontend-разработка",
+    "backend": "Backend-разработка",
+    "design": "UI/UX-дизайн",
+}
+
+
 const EntriesList: React.FC<EntriesListProps> = ({ entries, setEntries, userID }) => {
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
@@ -104,7 +111,7 @@ const EntriesList: React.FC<EntriesListProps> = ({ entries, setEntries, userID }
                                 Курс
                             </Typography>
                             <Typography variant="h6" gutterBottom>
-                                {entry.Course}
+                                {courseTexts[entry.Course]}
                             </Typography>
 
                             <Typography variant="subtitle2" color="text.secondary">
