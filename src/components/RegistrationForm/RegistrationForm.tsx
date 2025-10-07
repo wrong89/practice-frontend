@@ -22,7 +22,15 @@ const RegistrationForm = () => {
         handleSubmit,
         control,
         formState: { errors },
-    } = useForm<RegistrationFormInputs>();
+    } = useForm<RegistrationFormInputs>({
+        defaultValues: {
+            login: "",
+            password: "",
+            fullName: "",
+            phone: "",
+            email: "",
+        },
+    })
     const navigate = useNavigate();
 
     const [errMsg, setErrMsg] = useState("");
@@ -106,7 +114,7 @@ const RegistrationForm = () => {
                     required: "Введите ФИО",
                     pattern: {
                         value: /^[А-Яа-яЁё\s]+$/,
-                        message: "Допускаются только кириллические буквы и пробелы",
+                        message: "Невалидное ФИО",
                     },
                     validate: (value) => {
                         const parts = value.trim().split(/\s+/);
