@@ -1,0 +1,16 @@
+
+.slider {
+    width: 80%;
+    margin: 0 auto;
+
+    &__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: #f2f2f2;
+        background-color: lightcoral;
+        padding: 100px;
+        margin: 0 20px;
+    }
+}
