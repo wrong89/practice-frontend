@@ -32,6 +32,7 @@ const CreateEntryForm = () => {
     } = useForm<CreateEntryInputs>();
     const navigate = useNavigate()
     const [msg, setMsg] = useState("")
+    const [success, setSuccess] = useState(false)
 
 
     const onSubmit: SubmitHandler<CreateEntryInputs> = (data) => {
@@ -52,8 +53,9 @@ const CreateEntryForm = () => {
 
         createEntry(entry, user.token).then((res) => {
             console.log("Created entry:", res);
-
+            setSuccess(true)
         }).catch((err) => {
+            setSuccess(false)
             if (err instanceof APIException) {
                 const msg = ErrorMessages[err.messageFromServer]
                 if (msg) {
@@ -154,11 +156,12 @@ const CreateEntryForm = () => {
             </FormControl>
 
             {msg && <p style={{ color: "red", textAlign: "center" }}>{msg}</p>}
+            {success && <p style={{ color: "green", textAlign: "center" }}>Заявка успешно создана</p>}
 
             <Button type="submit" variant="contained">
                 Создать запись
             </Button>
-        </Box>
+        </Box >
     );
 };
 

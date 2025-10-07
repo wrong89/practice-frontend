@@ -1,11 +1,14 @@
+import { updateEntryStatus } from "@/api/entry";
 import type { Entry } from "@/api/entry/types";
 import { userIsAdmin } from "@/api/user";
+import { getCurrentUser } from "@/utils/auth";
 import { Box, Button, Card, CardActions, CardContent, Chip, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Loader from "../ui/Loader/Loader";
 
 interface EntriesListProps {
     entries: Entry[];
+    setEntries: React.Dispatch<React.SetStateAction<Entry[]>>;
     userID?: number;
 }
 
@@ -21,7 +24,7 @@ const texts: Record<string, string> = {
     "rejected": "Отклонена",
 }
 
-const EntriesList: React.FC<EntriesListProps> = ({ entries, userID }) => {
+const EntriesList: React.FC<EntriesListProps> = ({ entries, setEntries, userID }) => {
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -40,6 +43,42 @@ const EntriesList: React.FC<EntriesListProps> = ({ entries, userID }) => {
     if (!entries || entries.length === 0) {
         return <Typography align="center" sx={{ mt: 2 }}>Заявок пока нет</Typography>;
     }
+
+
+    const handleStatusChange = async (id: number, status: string) => {
+        const userToken = getCurrentUser()?.token;
+        if (!userToken) return;
+
+        // Обновляем локально сразу (оптимистично)
+        setEntries((entries) =>
+            entries.map((entry) =>
+                entry.ID === id ? { ...entry, Status: status } : entry
+            )
+        );
+
+        try {
+            const res = await updateEntryStatus({ id, status }, userToken);
+
+            // Нормализуем объект API под Entry
+            setEntries((entries) =>
+                entries.map((entry) =>
+                    entry.ID === id
+                        ? {
+                            ...entry,
+                            Course: res.Course ?? entry.Course,
+                            Date: res.Date ?? entry.Date,
+                            PaymentMethod: res.PaymentMethod ?? entry.PaymentMethod,
+                            Status: res.Status ?? entry.Status,
+                        }
+                        : entry
+                )
+            );
+        } catch (err) {
+            console.log(err);
+            // Можно откатить локальный статус, если нужно
+        }
+    };
+
 
     return (
         <Box display="flex" flexWrap="wrap" gap={3} justifyContent="center">
@@ -102,10 +141,14 @@ const EntriesList: React.FC<EntriesListProps> = ({ entries, userID }) => {
 
                         {isAdmin && (
                             <CardActions sx={{ justifyContent: "center", gap: 1, width: '100%', pb: 2 }}>
-                                <Button size="small" variant="contained" color="primary">
+                                <Button size="small" variant="contained" color="primary" onClick={() => {
+                                    handleStatusChange(entry.ID, "processed")
+                                }}>
                                     Обработать
                                 </Button>
-                                <Button size="small" variant="contained" color="error">
+                                <Button size="small" variant="contained" color="error" onClick={() => {
+                                    handleStatusChange(entry.ID, "rejected")
+                                }}>
                                     Отклонить
                                 </Button>
                             </CardActions>

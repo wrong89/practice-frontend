@@ -17,3 +17,8 @@ export interface Entry {
 export interface GetEntriesResponse {
     entries: Entry[]
 }
+
+export interface UpdateEntryStatus {
+    id: number,
+    status: string,
+}

@@ -2,7 +2,7 @@ import { getCurrentUser } from '@/utils/auth';
 import handleAPIError from '../error';
 import { api } from '../index';
 import { userIsAdmin } from '../user';
-import type { CreateEntry, Entry, GetEntriesResponse } from './types';
+import type { CreateEntry, Entry, GetEntriesResponse, UpdateEntryStatus } from './types';
 
 export async function createEntry(payload: CreateEntry, userToken: string): Promise<Entry> {
     try {
@@ -41,6 +41,21 @@ export async function getEntries(userToken: string): Promise<Entry[]> {
         });
 
         return res.data.entries;
+    } catch (err) {
+        handleAPIError(err);
+    }
+}
+
+export async function updateEntryStatus(payload: UpdateEntryStatus, userToken: string): Promise<Entry> {
+    try {
+        console.log("Payload", payload)
+        const res = await api.patch<Entry>("/entry", payload, {
+            headers: {
+                "Authorization": `Bearer ${userToken}`
+            }
+        });
+
+        return res.data;
     } catch (err) {
         handleAPIError(err);
     }

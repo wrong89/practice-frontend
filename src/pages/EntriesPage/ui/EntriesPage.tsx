@@ -22,7 +22,7 @@ const EntriesPage = () => {
 
     const [entries, setEntries] = useState<Entry[]>([])
     const [msg, setMsg] = useState("")
-    const [loading, setLoading] = useState(true)
+    const [_, setLoading] = useState(true)
 
     const user = getCurrentUser()
     if (!user) {
@@ -59,7 +59,7 @@ const EntriesPage = () => {
         <div className={cls.entries}>
             <h1 className={cls.entries__title}>Заявки</h1>
             {msg && <p style={{ color: "red", textAlign: "center" }}>{msg}</p>}
-            <EntriesList entries={entries} userID={+user.uid} />
+            <EntriesList entries={entries} setEntries={setEntries} userID={+user.uid} />
         </div>
     )
 }

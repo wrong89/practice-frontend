@@ -3,14 +3,16 @@ import { RoutePath } from '@/config/routeConfig/routeConfig';
 import { getCurrentUser, isAuthenticated, logout } from '@/utils/auth';
 import { Button } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import cls from './Header.module.scss';
 
 const Header = () => {
     const currentUser = getCurrentUser();
 
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [_, setIsAdmin] = useState(false);
     const isAuth = isAuthenticated();
+
+    const navigate = useNavigate()
 
     if (currentUser != null && isAuth) {
         userIsAdmin(+currentUser.uid).then((res) => {
@@ -23,7 +25,8 @@ const Header = () => {
     const logoutHandler = () => {
         logout();
         // window.location.reload();
-        location.reload()
+        // location.reload()
+        navigate(RoutePath.login)
     }
 
 
