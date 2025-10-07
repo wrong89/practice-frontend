@@ -118,7 +118,7 @@ const RegistrationForm = () => {
                     },
                     validate: (value) => {
                         const parts = value.trim().split(/\s+/);
-                        if (parts.length < 2) return "Введите как минимум фамилию и имя";
+                        if (parts.length < 2) return "Невалидное ФИО";
                         return true;
                     },
                 }}
