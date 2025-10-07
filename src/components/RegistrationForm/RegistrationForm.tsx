@@ -8,21 +8,41 @@ import { useState } from "react";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
 
+type RegistrationFormInputs = {
+    login: string;
+    password: string;
+    fullName: string;
+    phone: string;
+    email: string;
+}
+
 const RegistrationForm = () => {
     const {
         register,
         handleSubmit,
         control,
         formState: { errors },
-    } = useForm<UserRegisterPayload>();
+    } = useForm<RegistrationFormInputs>();
     const navigate = useNavigate();
 
     const [errMsg, setErrMsg] = useState("");
 
-    const onSubmit: SubmitHandler<UserRegisterPayload> = (data) => {
+    const onSubmit: SubmitHandler<RegistrationFormInputs> = (data) => {
         console.log("Form data:", data);
 
-        registerUser(data)
+        const [name, surname, patronymic] = data.fullName.split(" ")
+
+        const user: UserRegisterPayload = {
+            login: data.login,
+            password: data.password,
+            name,
+            surname,
+            patronymic,
+            phone: data.phone,
+            email: data.email,
+        }
+
+        registerUser(user)
             .then((user) => {
                 console.log("User:", user);
                 navigate(RoutePath.login);
@@ -79,6 +99,33 @@ const RegistrationForm = () => {
                 variant="outlined"
             />
 
+            <Controller
+                name="fullName"
+                control={control}
+                rules={{
+                    required: "Введите ФИО",
+                    pattern: {
+                        value: /^[А-Яа-яЁё\s]+$/,
+                        message: "Допускаются только кириллические буквы и пробелы",
+                    },
+                    validate: (value) => {
+                        const parts = value.trim().split(/\s+/);
+                        if (parts.length < 2) return "Введите как минимум фамилию и имя";
+                        return true;
+                    },
+                }}
+                render={({ field }) => (
+                    <TextField
+                        {...field}
+                        required
+                        label="ФИО"
+                        variant="outlined"
+                        error={!!errors.fullName}
+                        helperText={errors.fullName?.message}
+                    />
+                )}
+            />
+            {/* 
             <TextField
                 required
                 error={!!errors.name}
@@ -104,7 +151,7 @@ const RegistrationForm = () => {
                 {...register("patronymic")}
                 label="Отчество"
                 variant="outlined"
-            />
+            /> */}
 
             <Controller
                 name="phone"
