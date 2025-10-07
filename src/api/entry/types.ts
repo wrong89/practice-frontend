@@ -5,10 +5,15 @@ export interface CreateEntry {
     user_id: number
 }
 
-export interface CreateEntryResponse {
-    "course": string
-    "date": string,
-    "user_id": number,
-    "payment_method": string,
-    "status": string,
+export interface Entry {
+    "ID": number,
+    "Course": string,
+    "Date": string,
+    "UserID": number,
+    "PaymentMethod": string,
+    "Status": string,
+}
+
+export interface GetEntriesResponse {
+    entries: Entry[]
 }
