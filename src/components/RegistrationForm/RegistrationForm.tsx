@@ -101,7 +101,7 @@ const RegistrationForm = () => {
                 required
                 error={!!errors.password}
                 helperText={errors.password && "Пароль должен быть длиннее 8 символов"}
-                {...register("password", { required: true, minLength: 3 })}
+                {...register("password", { required: true, minLength: 8 })}
                 label="Пароль"
                 type="password"
                 variant="outlined"
