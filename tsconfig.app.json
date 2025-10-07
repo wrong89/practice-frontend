@@ -41,7 +41,7 @@
             ],
             "@providers/*": [
                 "src/providers/*"
-            ]
+            ],
         },
         /* Bundler mode */
         "moduleResolution": "bundler",

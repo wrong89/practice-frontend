@@ -5,38 +5,49 @@ import type { UserRegisterPayload } from "@/api/user/types";
 import { RoutePath } from "@/config/routeConfig/routeConfig";
 import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router";
+
+const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 10); // оставляем максимум 10 цифр
+    let formatted = "8(";
+    if (digits.length > 0) formatted += digits.slice(0, 3);
+    if (digits.length >= 4) formatted += ")" + digits.slice(3, 6);
+    if (digits.length >= 7) formatted += "-" + digits.slice(6, 8);
+    if (digits.length >= 9) formatted += "-" + digits.slice(8, 10);
+    return formatted;
+};
 
 const RegistrationForm = () => {
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors },
     } = useForm<UserRegisterPayload>();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const [errMsg, setErrMsg] = useState("")
+    const [errMsg, setErrMsg] = useState("");
 
     const onSubmit: SubmitHandler<UserRegisterPayload> = (data) => {
         console.log("Form data:", data);
 
-        registerUser(data).then((user) => {
-            console.log("User:", user);
-            navigate(RoutePath.login)
-        }).catch((err) => {
-            if (err instanceof APIException) {
-                const msg = ErrorMessages[err.messageFromServer]
-                if (msg) {
-                    setErrMsg(msg)
+        registerUser(data)
+            .then((user) => {
+                console.log("User:", user);
+                navigate(RoutePath.login);
+            })
+            .catch((err) => {
+                if (err instanceof APIException) {
+                    const msg = ErrorMessages[err.messageFromServer];
+                    if (msg) setErrMsg(msg);
+                    console.log(err.messageFromServer);
+                    console.log(err.time);
+                    console.log(err.status);
+                } else {
+                    console.log(err);
                 }
-                console.log(err.messageFromServer); // "invalid phone number"
-                console.log(err.time);              // "2025-10-06T21:38:45.1919612+03:00"
-                console.log(err.status);            // HTTP статус от сервера
-            } else {
-                console.log(err);
-            }
-        });
+            });
     };
 
     return (
@@ -105,16 +116,48 @@ const RegistrationForm = () => {
                 variant="outlined"
             />
 
-            <TextField
-                required
-                error={!!errors.phone}
-                helperText={errors.phone && "Введите корректный номер телефона"}
-                {...register("phone", {
-                    required: true,
-                    pattern: /^\d{10,12}$/,
-                })}
-                label="Телефон"
-                variant="outlined"
+            <Controller
+                name="phone"
+                control={control}
+                rules={{
+                    required: "Введите номер телефона",
+                    pattern: {
+                        value: /^8\d{10}$/,
+                        message: "Введите 11 цифр номера телефона, начиная с 8",
+                    },
+                }}
+                render={({ field }) => {
+                    const digits = field.value || "";
+
+                    // Форматируем номер как 8(XXX)XXX-XX-XX
+                    let formatted = "";
+                    if (digits.length > 0) formatted += digits[0] + "(";
+                    if (digits.length >= 2) formatted += digits.slice(1, 4);
+                    if (digits.length >= 5) formatted += ")" + digits.slice(4, 7);
+                    if (digits.length >= 8) formatted += "-" + digits.slice(7, 9);
+                    if (digits.length >= 10) formatted += "-" + digits.slice(9, 11);
+
+                    return (
+                        <TextField
+                            required
+                            label="Телефон"
+                            variant="outlined"
+                            error={!!errors.phone}
+                            helperText={errors.phone?.message}
+                            value={formatted}
+                            onChange={(e) => {
+                                const inputDigits = e.target.value.replace(/\D/g, "");
+
+                                // Ограничиваем до 11 цифр
+                                let newDigits = inputDigits;
+                                if (!newDigits.startsWith("8")) {
+                                    newDigits = "8" + newDigits; // автоматически добавляем 8 в начале
+                                }
+                                field.onChange(newDigits.slice(0, 11));
+                            }}
+                        />
+                    );
+                }}
             />
 
             <TextField
